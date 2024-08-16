@@ -19,10 +19,9 @@
           @change="toggleComplete(todo)"
           class="checkbox"
         />
-        <!-- Apply the 'completed' class based on the todo.completed status -->
         <span :class="{ 'completed': todo.completed }" class="todo-title">{{ todo.title }}</span>
         <button @click="startEdit(todo)" class="edit-button">Edit</button>
-        <button @click="deleteTodo(todo.id)" class="delete-button">Delete</button>
+        <button @click="handleDelete(todo.id)" class="delete-button">Delete</button>
       </div>
     </div>
   </div>
@@ -46,7 +45,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['fetchTodos', 'updateTodo', 'deleteTodo', 'addTodo']),
+    ...mapActions(['fetchTodos', 'toggleComplete', 'deleteTodo', 'addTodo', 'updateTodo']),
     
     startEdit(todo) {
       this.editingTodo = { ...todo }; // Copy the todo to be edited
@@ -77,8 +76,9 @@ export default {
       }
     },
 
-    async deleteTodo(todoId) {
+    async handleDelete(todoId) {
       try {
+        // Dispatch the Vuex action to delete the todo
         await this.deleteTodo(todoId);
       } catch (error) {
         console.error("Failed to delete todo:", error);
